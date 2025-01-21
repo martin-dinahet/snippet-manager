@@ -2,20 +2,88 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+body {
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
+    --background: #ffffff;
+    --foreground: #0a0a0a;
+    --card: #ffffff;
+    --card-foreground: #0a0a0a;
+    --popover: #ffffff;
+    --popover-foreground: #0a0a0a;
+    --primary: #171717;
+    --primary-foreground: #fafafa;
+    --secondary: #f5f5f5;
+    --secondary-foreground: #171717;
+    --muted: #f5f5f5;
+    --muted-foreground: #737373;
+    --accent: #f5f5f5;
+    --accent-foreground: #171717;
+    --destructive: #e63946;
+    --destructive-foreground: #fafafa;
+    --border: #e5e5e5;
+    --input: #e5e5e5;
+    --ring: #0a0a0a;
+    --chart-1: #d22e31;
+    --chart-2: #3a9875;
+    --chart-3: #4682b4;
+    --chart-4: #ffb545;
+    --chart-5: #ff9d3b;
+    --radius: 0.5rem;
+    --sidebar-background: #fafafa;
+    --sidebar-foreground: #3f3f3f;
+    --sidebar-primary: #1b1b33;
+    --sidebar-primary-foreground: #fafafa;
+    --sidebar-accent: #f4f4f4;
+    --sidebar-accent-foreground: #1b1b33;
+    --sidebar-border: #d2d2d2;
+    --sidebar-ring: #0e93d6;
+  }
+  .dark {
     --background: #0a0a0a;
-    --foreground: #ededed;
+    --foreground: #fafafa;
+    --card: #0a0a0a;
+    --card-foreground: #fafafa;
+    --popover: #0a0a0a;
+    --popover-foreground: #fafafa;
+    --primary: #fafafa;
+    --primary-foreground: #171717;
+    --secondary: #262626;
+    --secondary-foreground: #fafafa;
+    --muted: #262626;
+    --muted-foreground: #a3a3a3;
+    --accent: #262626;
+    --accent-foreground: #fafafa;
+    --destructive: #9a1e20;
+    --destructive-foreground: #fafafa;
+    --border: #262626;
+    --input: #262626;
+    --ring: #d4d4d4;
+    --chart-1: #4682b4;
+    --chart-2: #339966;
+    --chart-3: #ffa64d;
+    --chart-4: #b97ebd;
+    --chart-5: #ff5577;
+    --sidebar-background: #1b1b33;
+    --sidebar-foreground: #f4f4f4;
+    --sidebar-primary: #377bd6;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #272731;
+    --sidebar-accent-foreground: #f4f4f4;
+    --sidebar-border: #272731;
+    --sidebar-ring: #0e93d6;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
 }
