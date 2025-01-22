@@ -1,29 +1,41 @@
 "use client";
 
+import { Separator } from "@/components/ui/separator";
+import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const Page: React.FC = (): React.JSX.Element => {
-  const [message, setMessage] = useState<string>("");
+  const [snippets, setSnippets] = useState<Array<string>>([]);
 
   useEffect(() => {
-    const fetchMessage = async () => {
+    const fetchSnippets = async () => {
       try {
-        const response = await fetch("/api/hello");
+        const response = await fetch("/api/snippets");
         if (!response.ok) throw new Error("Network response was not ok");
         const data = await response.json();
-        setMessage(data.message);
+        setSnippets(data);
       } catch (error) {
-        console.error(`Error fetching message: ${error}`);
-        setMessage("Error fetching message");
+        console.error(`Error fetching snippets: ${error}`);
+        setSnippets(["Error fetching snippets"]);
       }
     };
-    fetchMessage();
+    fetchSnippets();
   }, []);
 
   return (
     <>
       <main className="w-screen min-h-screen grid place-items-center">
-        <h1 className="text-2xl font-bold">{message}</h1>
+        <ul className="flex flex-col gap-2">
+          {snippets.map((snippet) => (
+            <>
+              <li>
+                Plus
+                <span>{snippet}</span>
+              </li>
+              <Separator />
+            </>
+          ))}
+        </ul>
       </main>
     </>
   );

@@ -9,11 +9,14 @@ export class Snippet {
   title: string;
 
   @Column()
-  description: string;
-
-  @Column()
   language: string;
 
-  @Column()
+  @Column({ type: "datetime", default: () => "CURRENT_TIMESTAMP" })
+  createdAt: Date;
+
+  @Column("text")
+  description: string;
+
+  @Column("text")
   content: string;
 }
