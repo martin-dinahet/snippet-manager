@@ -1,4 +1,5 @@
 import { AppDataSource, InitializeDatabase } from "@/lib/database";
+import { CreateSnippetDto } from "@/lib/dto/createSnippet.dto";
 import { Snippet } from "@/lib/entities/Snippet";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -13,8 +14,8 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
   try {
     const dataSource = await InitializeDatabase();
     const snippetRepository = AppDataSource.getRepository(Snippet);
-    const body = await request.json();
-    const snippet = snippetRepository.create(body);
+    const createSnippetDto: CreateSnippetDto = await request.json();
+    const snippet = snippetRepository.create(createSnippetDto);
     const result = snippetRepository.save(snippet);
     return NextResponse.json(result, { status: 201 });
   } catch (err) {
