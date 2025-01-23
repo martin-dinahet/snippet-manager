@@ -41,3 +41,21 @@ export const PATCH = async (
     return NextResponse.json({ error: "Failed to retrieve snippet" }, { status: 500 });
   }
 };
+
+export const DELETE = async (
+  request: NextRequest,
+  { params }: { params: { id: string } }
+): Promise<NextResponse> => {
+  try {
+    const dataSource = await InitializeDatabase();
+    const snippetRepository = AppDataSource.getRepository(Snippet);
+    const snippet = await snippetRepository.findOne({ where: { id: params.id } });
+    if (!snippet) {
+      return NextResponse.json({ error: "Snippet not found" }, { status: 404 });
+    }
+    snippetRepository.delete(params.id);
+    return NextResponse.json({ message: "Snippet deleted successfully" }, { status: 200 });
+  } catch (err) {
+    return NextResponse.json({ error: "Failwed to delete snippet" }, { status: 404 });
+  }
+};
