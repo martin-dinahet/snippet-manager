@@ -1,0 +1,207 @@
+openapi: 3.0.3
+info:
+  title: Snippet Management API
+  description: API for managing code snippets, including creation, retrieval, updating, and deletion.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api
+    description: Local development server
+
+paths:
+  /snippets:
+    get:
+      summary: Retrieve all snippets
+      operationId: getAllSnippets
+      responses:
+        "200":
+          description: A list of code snippets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Snippet"
+        "500":
+          description: Failed to retrieve snippets
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      summary: Create a new snippet
+      operationId: createSnippet
+      requestBody:
+        description: Snippet to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateSnippetDto"
+      responses:
+        "201":
+          description: Snippet successfully created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Snippet"
+        "500":
+          description: Failed to create snippet
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /snippets/{id}:
+    get:
+      summary: Retrieve a snippet by ID
+      operationId: getSnippetById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique ID of the snippet
+      responses:
+        "200":
+          description: Snippet retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Snippet"
+        "404":
+          description: Snippet not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Failed to retrieve snippet
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    patch:
+      summary: Update a snippet by ID
+      operationId: updateSnippetById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique ID of the snippet
+      requestBody:
+        description: Fields to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateSnippetDto"
+      responses:
+        "200":
+          description: Snippet updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  updatedSnippet:
+                    $ref: "#/components/schemas/Snippet"
+        "404":
+          description: Snippet not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Failed to update snippet
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      summary: Delete a snippet by ID
+      operationId: deleteSnippetById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique ID of the snippet
+      responses:
+        "200":
+          description: Snippet deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        "404":
+          description: Snippet not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Failed to delete snippet
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+components:
+  schemas:
+    Snippet:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the snippet
+        title:
+          type: string
+        language:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        description:
+          type: string
+        content:
+          type: string
+    CreateSnippetDto:
+      type: object
+      required:
+        - title
+        - language
+        - description
+        - content
+      properties:
+        title:
+          type: string
+        language:
+          type: string
+        description:
+          type: string
+        content:
+          type: string
+    UpdateSnippetDto:
+      type: object
+      properties:
+        title:
+          type: string
+        language:
+          type: string
+        description:
+          type: string
+        content:
+          type: string
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: The error message
