@@ -1,5 +1,5 @@
 import { AppDataSource, InitializeDatabase } from "@/lib/database";
-import { CreateSnippetDto } from "@/lib/dto/createSnippet.dto";
+import { CreateSnippetDto } from "@/lib/dto/snippet.dto";
 import { Snippet } from "@/lib/entities/Snippet";
 import { NextRequest, NextResponse } from "next/server";
 
