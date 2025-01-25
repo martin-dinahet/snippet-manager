@@ -17,6 +17,9 @@ export class Snippet {
   @Column("text")
   description: string;
 
+  @Column()
+  tags: Array<string>;
+
   @Column("text")
   content: string;
 }
