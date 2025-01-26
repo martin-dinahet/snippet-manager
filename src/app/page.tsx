@@ -1,14 +1,22 @@
 "use client";
 
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Sidebar, SidebarHeader, SidebarMenuButton } from "@/components/ui/sidebar";
 import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
-import { Filter } from "lucide-react";
+import { ArrowUpDown, Filter } from "lucide-react";
 import { useState } from "react";
 
 const Page: React.FC = (): React.JSX.Element => {
   const [query, setQuery] = useState("");
+  const [position, setPosition] = useState("up");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
@@ -32,20 +40,35 @@ const Page: React.FC = (): React.JSX.Element => {
 
   return (
     <Sidebar>
-      <SidebarHeader className="border-b p-2">
+      <SidebarHeader className="border-b p-2 flex">
         <Input type="text" placeholder={"Search"} value={query} onChange={handleInputChange} className="w-full p-2 " />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <SidebarMenuButton>
-              <Filter />
-            </SidebarMenuButton>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-[--radix-popper-anchor-width]">
-            {uniqueCategories.map((category) => (
-              <DropdownMenuCheckboxItem key={category}>{category}</DropdownMenuCheckboxItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <SidebarMenuButton>
+                <Filter />
+              </SidebarMenuButton>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-[--radix-popper-anchor-width]">
+              {uniqueCategories.map((category) => (
+                <DropdownMenuCheckboxItem key={category}>{category}</DropdownMenuCheckboxItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <SidebarMenuButton className="justify-end">
+                <ArrowUpDown />
+              </SidebarMenuButton>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuRadioGroup value={position} onValueChange={setPosition}>
+                <DropdownMenuRadioItem value="up">croissant</DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="down">décroissant</DropdownMenuRadioItem>
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </SidebarHeader>
     </Sidebar>
   );
