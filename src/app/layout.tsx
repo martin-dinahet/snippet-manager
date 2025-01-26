@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -9,7 +10,12 @@ export const metadata: Metadata = {
 const RootLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
   return (
     <html lang="en">
-      <body className="antialiased">{children}</body>
+      <SidebarProvider>
+      <body className="antialiased">
+        {children}
+        <SidebarTrigger />
+      </body>
+      </SidebarProvider>
     </html>
   );
 };
