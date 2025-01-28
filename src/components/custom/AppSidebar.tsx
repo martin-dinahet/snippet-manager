@@ -10,9 +10,25 @@ import { SidebarMenu } from "@/components/ui/sidebar";
 import { SidebarMenuButton } from "@/components/ui/sidebar";
 import { SidebarMenuItem } from "@/components/ui/sidebar";
 import { useSnippetsContext } from "./SnippetsProvider";
+import { RadioGroup } from "@/components/ui/radio-group";
+import { RadioGroupItem } from "@/components/ui/radio-group";
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
-export const AppSidebar = (): React.JSX.Element => {
+export const AppSidebar: React.FC = (): React.JSX.Element => {
   const { snippets, uniqueTags, error, loading } = useSnippetsContext();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedTag, setSelectedTag] = useState("all");
+
+  if (error) return <div>Error: {error}</div>;
+  if (loading) return <div>Loading...</div>;
+
+  const filteredSnippets = snippets.filter(
+    (snippet) =>
+      snippet.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      (selectedTag === "all" || snippet.tags.includes(selectedTag))
+  );
 
   return (
     <Sidebar className="w-64">
@@ -21,27 +37,42 @@ export const AppSidebar = (): React.JSX.Element => {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Snippets</SidebarGroupLabel>
+          <SidebarGroupLabel>Search</SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
-              {snippets.map((snippet) => (
-                <SidebarMenuItem key={snippet.id}>
-                  <SidebarMenuButton asChild>
-                    <a href={`/snippets/${snippet.id}`}>{snippet.title}</a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
+            <Input
+              type="text"
+              placeholder="Search snippets..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full"
+            />
           </SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup>
-          <SidebarGroupLabel>Tags</SidebarGroupLabel>
+          <SidebarGroupLabel>Filter by Tag</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <RadioGroup value={selectedTag} onValueChange={setSelectedTag}>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="all" id="all" />
+                <Label htmlFor="all">All</Label>
+              </div>
+              {uniqueTags.map((tag) => (
+                <div key={tag} className="flex items-center space-x-2">
+                  <RadioGroupItem value={tag} id={tag} />
+                  <Label htmlFor={tag}>{tag}</Label>
+                </div>
+              ))}
+            </RadioGroup>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>Snippets</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {uniqueTags.map((tag) => (
-                <SidebarMenuItem key={tag}>
+              {filteredSnippets.map((snippet) => (
+                <SidebarMenuItem key={snippet.id}>
                   <SidebarMenuButton asChild>
-                    <a href={`/tags/${tag}`}>{tag}</a>
+                    <a href={`/snippets/${snippet.id}`}>{snippet.title}</a>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
