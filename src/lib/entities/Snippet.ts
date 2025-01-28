@@ -11,7 +11,7 @@ export class Snippet {
   @Column()
   language: string;
 
-  @Column()
+  @Column("simple-json")
   tags: Array<string>;
 
   @Column({ type: "datetime", default: () => "CURRENT_TIMESTAMP" })
