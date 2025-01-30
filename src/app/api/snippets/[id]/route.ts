@@ -1,4 +1,5 @@
-import { AppDataSource, InitializeDatabase } from "@/lib/database";
+import { InitializeDatabase } from "@/lib/database";
+import { AppDataSource } from "@/lib/data-source";
 import { UpdateSnippetDto } from "@/lib/dto/snippet.dto";
 import { Snippet } from "@/lib/entities/Snippet";
 import { NextRequest, NextResponse } from "next/server";
@@ -8,7 +9,9 @@ export const GET = async (
   { params }: { params: { id: string } }
 ): Promise<NextResponse> => {
   try {
-    const dataSource = await InitializeDatabase();
+    if (!AppDataSource.isInitialized) {
+      await AppDataSource.initialize();
+    }
     const snippetRepository = AppDataSource.getRepository(Snippet);
     const snippet = await snippetRepository.findOne({
       where: { id: params.id },
@@ -27,7 +30,9 @@ export const PATCH = async (
   { params }: { params: { id: string } }
 ): Promise<NextResponse> => {
   try {
-    const dataSource = await InitializeDatabase();
+    if (!AppDataSource.isInitialized) {
+      await AppDataSource.initialize();
+    }
     const snippetRepository = AppDataSource.getRepository(Snippet);
     const updateData: UpdateSnippetDto = await request.json();
     const snippet = await snippetRepository.findOne({ where: { id: params.id } });
@@ -47,7 +52,9 @@ export const DELETE = async (
   { params }: { params: { id: string } }
 ): Promise<NextResponse> => {
   try {
-    const dataSource = await InitializeDatabase();
+    if (!AppDataSource.isInitialized) {
+      await AppDataSource.initialize();
+    }
     const snippetRepository = AppDataSource.getRepository(Snippet);
     const snippet = await snippetRepository.findOne({ where: { id: params.id } });
     if (!snippet) {

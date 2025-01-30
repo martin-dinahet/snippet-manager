@@ -1,4 +1,8 @@
 import type { Metadata } from "next";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/custom/AppSidebar";
+import { SnippetsProvider } from "@/components/custom/SnippetsProvider";
+
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -8,8 +12,18 @@ export const metadata: Metadata = {
 
 const RootLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
   return (
-    <html lang="en">
-      <body className="antialiased">{children}</body>
+    <html>
+      <body className="w-screen min-h-screen">
+        <SnippetsProvider>
+          <SidebarProvider>
+            <AppSidebar />
+            <main>
+              <SidebarTrigger />
+              {children}
+            </main>
+          </SidebarProvider>
+        </SnippetsProvider>
+      </body>
     </html>
   );
 };
