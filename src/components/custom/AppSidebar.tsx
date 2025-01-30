@@ -9,25 +9,36 @@ import { SidebarHeader } from "@/components/ui/sidebar";
 import { SidebarMenu } from "@/components/ui/sidebar";
 import { SidebarMenuButton } from "@/components/ui/sidebar";
 import { SidebarMenuItem } from "@/components/ui/sidebar";
-import { useSnippetsContext } from "./SnippetsProvider";
-import { RadioGroup } from "@/components/ui/radio-group";
-import { RadioGroupItem } from "@/components/ui/radio-group";
-import { useState } from "react";
+import { useSnippetsContext } from "@/components/custom/SnippetsProvider";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { useState } from "react";
 
 export const AppSidebar: React.FC = (): React.JSX.Element => {
   const { snippets, uniqueTags, error, loading } = useSnippetsContext();
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedTag, setSelectedTag] = useState("all");
+  const [selectedTags, setSelectedTags] = useState<Array<string>>([]);
 
   if (error) return <div>Error: {error}</div>;
   if (loading) return <div>Loading...</div>;
 
+  const handleTagChange = (tag: string, checked: boolean) => {
+    setSelectedTags((prev) => {
+      if (tag === "all") {
+        return checked ? uniqueTags : [];
+      }
+      if (checked) {
+        return [...prev, tag];
+      }
+      return prev.filter((t) => t !== tag);
+    });
+  };
+
   const filteredSnippets = snippets.filter(
     (snippet) =>
       snippet.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      (selectedTag === "all" || snippet.tags.includes(selectedTag))
+      (selectedTags.length === 0 || snippet.tags.some((tag) => selectedTags.includes(tag)))
   );
 
   return (
@@ -49,20 +60,36 @@ export const AppSidebar: React.FC = (): React.JSX.Element => {
           </SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup>
-          <SidebarGroupLabel>Filter by Tag</SidebarGroupLabel>
+          <SidebarGroupLabel>Filter by Tags</SidebarGroupLabel>
           <SidebarGroupContent>
-            <RadioGroup value={selectedTag} onValueChange={setSelectedTag}>
+            <div className="space-y-2">
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="all" id="all" />
-                <Label htmlFor="all">All</Label>
+                <Checkbox
+                  id="all"
+                  checked={selectedTags.length === 0}
+                  onCheckedChange={(checked) => handleTagChange("all", checked as boolean)}
+                />
+                <Label
+                  htmlFor="all"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                  All
+                </Label>
               </div>
               {uniqueTags.map((tag) => (
                 <div key={tag} className="flex items-center space-x-2">
-                  <RadioGroupItem value={tag} id={tag} />
-                  <Label htmlFor={tag}>{tag}</Label>
+                  <Checkbox
+                    id={tag}
+                    checked={selectedTags.includes(tag)}
+                    onCheckedChange={(checked) => handleTagChange(tag, checked as boolean)}
+                  />
+                  <Label
+                    htmlFor={tag}
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                    {tag}
+                  </Label>
                 </div>
               ))}
-            </RadioGroup>
+            </div>
           </SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup>
