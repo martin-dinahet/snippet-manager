@@ -18,10 +18,12 @@ const RootLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
         <SnippetsProvider>
           <SidebarProvider>
             <AppSidebar />
-            <AppHeader>
-              <SidebarTrigger />
-            </AppHeader>
-            <main>{children}</main>
+            <div className="w-full">
+              <AppHeader>
+                <SidebarTrigger />
+              </AppHeader>
+              <main>{children}</main>
+            </div>
           </SidebarProvider>
         </SnippetsProvider>
       </body>
