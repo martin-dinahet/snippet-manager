@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/custom/AppSidebar";
 import { SnippetsProvider } from "@/components/custom/SnippetsProvider";
+import { AppHeader } from "@/components/custom/AppHeader";
 
 import "./globals.css";
 
@@ -17,10 +18,10 @@ const RootLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
         <SnippetsProvider>
           <SidebarProvider>
             <AppSidebar />
-            <main>
+            <AppHeader>
               <SidebarTrigger />
-              {children}
-            </main>
+            </AppHeader>
+            <main>{children}</main>
           </SidebarProvider>
         </SnippetsProvider>
       </body>
