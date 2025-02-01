@@ -15,9 +15,11 @@ export const AppHeader: React.FC<Props> = ({ children }: Props): React.JSX.Eleme
 
   return (
     <>
-      <header className="w-full h-fit p-3 border-b bg-gray-50 flex gap-3 items-center">
-        {children}
-        <AppBreadcrumbs />
+      <header className="h-fit p-3 border-b bg-gray-50 flex gap-3 items-center justify-between sticky top-0">
+        <div className="flex gap-3 items-center">
+          {children}
+          <AppBreadcrumbs />
+        </div>
         <NewSnippetModal />
       </header>
     </>

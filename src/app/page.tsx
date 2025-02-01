@@ -7,7 +7,7 @@ const Page = (): React.JSX.Element => {
 
   return (
     <>
-      <div className="min-h-screen"></div>
+      <div className="min-h-screen">a</div>
     </>
   );
 };

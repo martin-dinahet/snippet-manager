@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 const RootLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
   return (
     <html>
-      <body className="w-screen min-h-screen">
+      <body className="w-screen min-h-screen overflow-y-hidden">
         <SnippetsProvider>
           <SidebarProvider>
             <AppSidebar />
