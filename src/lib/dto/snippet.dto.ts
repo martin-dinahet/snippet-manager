@@ -3,7 +3,6 @@ export class CreateSnippetDto {
   language: string;
   tags: Array<string>;
   description: string;
-  tags: Array<string>;
   content: string;
 }
 
@@ -12,6 +11,5 @@ export class UpdateSnippetDto {
   language?: string;
   tags?: Array<string>;
   description?: string;
-  tags?: Array<string>;
   content?: string;
 }
