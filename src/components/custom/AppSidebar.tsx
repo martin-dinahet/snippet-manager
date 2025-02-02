@@ -1,19 +1,22 @@
 "use client";
 
-import { Sidebar } from "@/components/ui/sidebar";
-import { SidebarContent } from "@/components/ui/sidebar";
-import { SidebarGroup } from "@/components/ui/sidebar";
-import { SidebarGroupContent } from "@/components/ui/sidebar";
-import { SidebarGroupLabel } from "@/components/ui/sidebar";
-import { SidebarHeader } from "@/components/ui/sidebar";
-import { SidebarMenu } from "@/components/ui/sidebar";
-import { SidebarMenuButton } from "@/components/ui/sidebar";
-import { SidebarMenuItem } from "@/components/ui/sidebar";
 import { useSnippetsContext } from "@/components/custom/SnippetsProvider";
+import { Button } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/ui/sidebar";
 import { useState } from "react";
+import { Filter } from "lucide-react";
 
 export const AppSidebar: React.FC = (): React.JSX.Element => {
   const { snippets, uniqueTags, error, loading } = useSnippetsContext();
@@ -62,34 +65,27 @@ export const AppSidebar: React.FC = (): React.JSX.Element => {
         <SidebarGroup>
           <SidebarGroupLabel>Filter by Tags</SidebarGroupLabel>
           <SidebarGroupContent>
-            <div className="space-y-2">
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="all"
-                  checked={selectedTags.length === 0}
-                  onCheckedChange={(checked) => handleTagChange("all", checked as boolean)}
-                />
-                <Label
-                  htmlFor="all"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="w-1/3">
+                <Filter/>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-48">
+                <DropdownMenuCheckboxItem checked={selectedTags.length === 0} onCheckedChange={(checked) => handleTagChange("all", checked)}>
                   All
-                </Label>
-              </div>
-              {uniqueTags.map((tag) => (
-                <div key={tag} className="flex items-center space-x-2">
-                  <Checkbox
-                    id={tag}
+                </DropdownMenuCheckboxItem>
+                {uniqueTags.map((tag) => (
+                  <DropdownMenuCheckboxItem
+                    key={tag}
                     checked={selectedTags.includes(tag)}
-                    onCheckedChange={(checked) => handleTagChange(tag, checked as boolean)}
-                  />
-                  <Label
-                    htmlFor={tag}
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                    onCheckedChange={(checked) => handleTagChange(tag, checked)}
+                  >
                     {tag}
-                  </Label>
-                </div>
-              ))}
-            </div>
+                  </DropdownMenuCheckboxItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup>
