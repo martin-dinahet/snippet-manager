@@ -2,7 +2,14 @@
 
 import { useSnippetsContext } from "@/components/custom/SnippetsProvider";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import {
   Sidebar,
@@ -15,13 +22,14 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { ArrowDownUp, Filter } from "lucide-react";
 import { useState } from "react";
-import { Filter } from "lucide-react";
 
 export const AppSidebar: React.FC = (): React.JSX.Element => {
   const { snippets, uniqueTags, error, loading } = useSnippetsContext();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTags, setSelectedTags] = useState<Array<string>>([]);
+  const [sortOrder, setSortOrder] = useState("mostRecent");
 
   if (error) return <div>Error: {error}</div>;
   if (loading) return <div>Loading...</div>;
@@ -38,7 +46,13 @@ export const AppSidebar: React.FC = (): React.JSX.Element => {
     });
   };
 
-  const filteredSnippets = snippets.filter(
+  const sortedSnippets = [...snippets].sort((a, b) => {
+    return sortOrder === "mostRecent"
+      ? new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      : new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+  });
+
+  const filteredSnippets = sortedSnippets.filter(
     (snippet) =>
       snippet.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
       (selectedTags.length === 0 || snippet.tags.some((tag) => selectedTags.includes(tag)))
@@ -62,13 +76,13 @@ export const AppSidebar: React.FC = (): React.JSX.Element => {
             />
           </SidebarGroupContent>
         </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Filter by Tags</SidebarGroupLabel>
+        <SidebarGroup className="flex flex-row">
           <SidebarGroupContent>
+            <SidebarGroupLabel>Filter by Tags</SidebarGroupLabel>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="w-1/3">
-                <Filter/>
+                <Button variant="outline" className="w-1/2">
+                  <Filter />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="w-48">
@@ -84,6 +98,22 @@ export const AppSidebar: React.FC = (): React.JSX.Element => {
                     {tag}
                   </DropdownMenuCheckboxItem>
                 ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarGroupContent>
+          <SidebarGroupContent>
+            <SidebarGroupLabel>Sort by</SidebarGroupLabel>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="w-1/2">
+                  <ArrowDownUp />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-48">
+                <DropdownMenuRadioGroup value={sortOrder} onValueChange={setSortOrder}>
+                  <DropdownMenuRadioItem value="mostRecent">Most Recent</DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value="oldest">Oldest</DropdownMenuRadioItem>
+                </DropdownMenuRadioGroup>
               </DropdownMenuContent>
             </DropdownMenu>
           </SidebarGroupContent>
