@@ -1,7 +1,7 @@
 "use client";
 
 import { useSnippetsContext } from "@/components/custom/SnippetsProvider";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -35,6 +35,9 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/colla
 import { Checkbox } from "../ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Label } from "../ui/label";
+import { Badge } from "../ui/badge";
+import { cn } from "@/lib/utils";
+import { Snippet } from "@/lib/entities/Snippet";
 
 export const AppSidebar: React.FC = (): React.JSX.Element => {
   const { snippets, uniqueTags, error, loading } = useSnippetsContext();
@@ -69,6 +72,21 @@ export const AppSidebar: React.FC = (): React.JSX.Element => {
       (selectedTags.length === 0 || snippet.tags.some((tag) => selectedTags.includes(tag)))
   );
 
+  const getSnippetAccentColor = (snippet: Snippet) => {
+    switch (snippet.language) {
+      case "javascript":
+        return "bg-yellow-500";
+      case "typescript":
+        return "bg-blue-500";
+      case "html":
+        return "bg-red-500";
+      case "css":
+        return "bg-purple-500";
+      default:
+        return "bg-green-500";
+    }
+  };
+
   return (
     <Sidebar className="w-64">
       <SidebarHeader>
@@ -100,7 +118,7 @@ export const AppSidebar: React.FC = (): React.JSX.Element => {
                 </Button>
               </CollapsibleTrigger>
               <CollapsibleContent className="mb-4">
-                <div className="flex p-3 pl-6 gap-3 items-center">
+                <div className="flex p-2 pl-6 gap-3 items-center">
                   <Checkbox
                     checked={selectedTags.length === 0}
                     onCheckedChange={(checked: boolean) => handleTagChange("all", checked)}
@@ -149,15 +167,31 @@ export const AppSidebar: React.FC = (): React.JSX.Element => {
         <SidebarGroup>
           <SidebarGroupLabel>Snippets</SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
-              {filteredSnippets.map((snippet) => (
-                <SidebarMenuItem key={snippet.id}>
-                  <SidebarMenuButton asChild>
-                    <a href={`/snippets/${snippet.id}`}>{snippet.title}</a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
+            {filteredSnippets.map((snippet) => (
+              <div
+                key={snippet.id}
+                className="p-2 pl-6 flex flex-col gap-1 rounded-md hover:bg-sidebar-accent">
+                <a
+                  href={`/snippets/${snippet.id}`}
+                  className="font-bold flex items-center gap-2 justify-between">
+                  {snippet.title}
+                  <div
+                    className={cn(
+                      "w-[7px] h-[7px] rounded-full",
+                      getSnippetAccentColor(snippet)
+                    )}></div>
+                </a>
+                <div className="flex gap-1">
+                  {snippet.tags.map((tag, key) => (
+                    <Badge
+                      key={key}
+                      className="w-fit text-[0.6rem] py-[0.01rem] h-fit bg-gray-200 text-primary">
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            ))}
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
