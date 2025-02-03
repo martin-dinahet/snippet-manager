@@ -22,8 +22,19 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { ArrowDownUp, Filter } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowDownUp,
+  ArrowDownWideNarrow,
+  ChevronsUpDown,
+  Filter,
+  Tag,
+} from "lucide-react";
 import { useState } from "react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
+import { Checkbox } from "../ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+import { Label } from "../ui/label";
 
 export const AppSidebar: React.FC = (): React.JSX.Element => {
   const { snippets, uniqueTags, error, loading } = useSnippetsContext();
@@ -76,46 +87,63 @@ export const AppSidebar: React.FC = (): React.JSX.Element => {
             />
           </SidebarGroupContent>
         </SidebarGroup>
-        <SidebarGroup className="flex flex-row">
+        <SidebarGroup>
+          <SidebarGroupLabel>Search Options</SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarGroupLabel>Filter by Tags</SidebarGroupLabel>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="w-1/2">
-                  <Filter />
+            <Collapsible>
+              <CollapsibleTrigger asChild>
+                <Button variant="ghost" className="w-full font-semibold flex justify-between">
+                  <div className="flex justify-start items-center gap-3">
+                    <Tag /> Filter by tag
+                  </div>
+                  <ChevronsUpDown />
                 </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-48">
-                <DropdownMenuCheckboxItem checked={selectedTags.length === 0} onCheckedChange={(checked) => handleTagChange("all", checked)}>
+              </CollapsibleTrigger>
+              <CollapsibleContent className="mb-4">
+                <div className="flex p-3 pl-6 gap-3 items-center">
+                  <Checkbox
+                    checked={selectedTags.length === 0}
+                    onCheckedChange={(checked: boolean) => handleTagChange("all", checked)}
+                  />
                   All
-                </DropdownMenuCheckboxItem>
-                {uniqueTags.map((tag) => (
-                  <DropdownMenuCheckboxItem
-                    key={tag}
-                    checked={selectedTags.includes(tag)}
-                    onCheckedChange={(checked) => handleTagChange(tag, checked)}
-                  >
+                </div>
+                {uniqueTags.map((tag, key) => (
+                  <div key={key} className="flex pl-6 gap-3 items-center">
+                    <Checkbox
+                      checked={selectedTags.includes(tag)}
+                      onCheckedChange={(checked: boolean) => handleTagChange(tag, checked)}
+                    />
                     {tag}
-                  </DropdownMenuCheckboxItem>
+                  </div>
                 ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarGroupContent>
-          <SidebarGroupContent>
-            <SidebarGroupLabel>Sort by</SidebarGroupLabel>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="w-1/2">
-                  <ArrowDownUp />
+              </CollapsibleContent>
+            </Collapsible>
+            <Collapsible>
+              <CollapsibleTrigger asChild>
+                <Button variant="ghost" className="w-full font-semibold flex justify-between">
+                  <div className="flex justify-start items-center gap-3">
+                    <ArrowDownWideNarrow />
+                    Sort
+                  </div>
+                  <ChevronsUpDown />
                 </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-48">
-                <DropdownMenuRadioGroup value={sortOrder} onValueChange={setSortOrder}>
-                  <DropdownMenuRadioItem value="mostRecent">Most Recent</DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem value="oldest">Oldest</DropdownMenuRadioItem>
-                </DropdownMenuRadioGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <RadioGroup
+                  value={sortOrder}
+                  onValueChange={setSortOrder}
+                  className="p-3 pl-6 gap-3">
+                  <div className="flex gap-3">
+                    <RadioGroupItem value="mostRecent" />
+                    <Label htmlFor="mostRecent">Most Recent</Label>
+                  </div>
+                  <div className="flex gap-3">
+                    <RadioGroupItem value="oldest" />
+                    <Label htmlFor="oldest">Oldest</Label>
+                  </div>
+                </RadioGroup>
+              </CollapsibleContent>
+            </Collapsible>
           </SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup>
