@@ -3,7 +3,7 @@
 import { useSnippetsContext } from "@/components/custom/SnippetsProvider";
 import { useParams } from "next/navigation";
 import { AppBreadcrumbs } from "@/components/custom/AppBreadcrumbs";
-import { NewSnippetModal } from "@/components/custom/NewSnippetModal";
+import { NewSnippetSheet } from "@/components/custom/NewSnippetSheet";
 
 interface Props {
   children?: React.ReactNode;
@@ -20,7 +20,7 @@ export const AppHeader: React.FC<Props> = ({ children }: Props): React.JSX.Eleme
           {children}
           <AppBreadcrumbs />
         </div>
-        <NewSnippetModal />
+        <NewSnippetSheet />
       </header>
     </>
   );
