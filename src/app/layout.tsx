@@ -1,8 +1,9 @@
 import * as React from "react";
 import "./globals.css";
 import { ConvexClientProvider } from "@/components/custom/providers/ConvexClientProvider";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/custom/AppSidebar";
+import { AppHeader } from "@/components/custom/AppHeader";
 
 export const metadata = {
   title: "Snippet Manager",
@@ -15,7 +16,10 @@ const RootLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         <ConvexClientProvider>
           <SidebarProvider>
             <AppSidebar />
-            <main>{children}</main>
+            <div className="w-full">
+              <AppHeader children={<SidebarTrigger />} />
+              <main>{children}</main>
+            </div>
           </SidebarProvider>
         </ConvexClientProvider>
       </body>
