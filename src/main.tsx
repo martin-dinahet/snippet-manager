@@ -5,17 +5,23 @@ import { Routes } from "react-router-dom";
 import { Route } from "react-router-dom";
 import { Index } from "@/pages/index";
 import { MainLayout } from "@/layouts/main-layout";
+import { ConvexProvider } from "convex/react";
+import { ConvexReactClient } from "convex/react";
 
 import "./index.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<MainLayout />}>
-          <Route index element={<Index />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <ConvexProvider
+      client={new ConvexReactClient(import.meta.env.VITE_CONVEX_URL)}
+    >
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<MainLayout />}>
+            <Route index element={<Index />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </ConvexProvider>
   </StrictMode>
 );
