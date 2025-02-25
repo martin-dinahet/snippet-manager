@@ -25,7 +25,8 @@
     /* Routing */
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "$/*": ["./convex/*"]
     }
   },
   "include": ["src"]
