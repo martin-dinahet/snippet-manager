@@ -19,8 +19,9 @@ export const Index: React.FC = () => {
   }, []);
 
   const handleSaveSnippet = (newSnippet: Snippet) => {
-    setSnippets([...snippets, newSnippet]);
-    saveSnippets(snippets);
+    const updatedSnippets = [...snippets, newSnippet];
+    setSnippets(updatedSnippets);
+    saveSnippets(updatedSnippets);
   };
 
   const handleDeleteSnippet = (id: string) => {
